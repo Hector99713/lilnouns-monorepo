@@ -28,11 +28,22 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     // Deploy the Nouns DAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
+    // Optionally write the deployed addresses to the SDK and subgraph configs.
+    if (true) {
+      await run('update-configs', {
+        contracts,
+      });
+    }
+
+    printContractsTable(contracts);
+    console.log('Deployment Complete.');
+
+    
     // Verify the contracts on Etherscan
     await run('verify-etherscan', {
       contracts,
     });
-
+/*
     // Populate the on-chain art
     await run('populate-descriptor', {
       nftDescriptor: contracts.NFTDescriptorV2.address,
@@ -64,13 +75,5 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       );
     }
 
-    // Optionally write the deployed addresses to the SDK and subgraph configs.
-    if (args.updateConfigs) {
-      await run('update-configs', {
-        contracts,
-      });
-    }
-
-    printContractsTable(contracts);
-    console.log('Deployment Complete.');
+    */
   });

@@ -1,0 +1,15 @@
+{
+  "network": "unknown",
+  "nounsToken": {
+    "address": "0x21B06BE72e8BBD1A918BD7A4ca3af535E2256399",
+    "startBlock": 659778
+  },
+  "nounsAuctionHouse": {
+    "address": "0x491a34A00D1e28a06546a97b69f753628e075155",
+    "startBlock": 659795
+  },
+  "nounsDAO": {
+    "address": "0xc2134b706cAAC024a637947ab109825c6FeC076C",
+    "startBlock": 659812
+  }
+}

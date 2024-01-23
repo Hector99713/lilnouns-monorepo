@@ -22,7 +22,7 @@ interface AppConfig {
   zoraKey: string;
 }
 
-type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
+type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli | 168587773;
 interface CacheBucket {
   name: string;
   version: string;
@@ -135,6 +135,16 @@ const app: Record<SupportedChains, AppConfig> = {
     enableRollbar: false,
     zoraKey: '',
   },
+  [168587773]: {
+    jsonRpcUri: 'https://sepolia.blast.io',
+    wsRpcUri: '',
+    subgraphApiUri: '',
+    nounsDAOSubgraphApiUri: '',
+    enableHistory: false,
+    nounsApiUri: '',
+    enableRollbar: false,
+    zoraKey: '',
+  }
 };
 
 const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
@@ -150,6 +160,9 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Hardhat]: {
     lidoToken: undefined,
   },
+  [168587773]: {
+    lidoToken: undefined,
+  }
 };
 
 const getAddresses = (): ContractAddresses => {
@@ -163,7 +176,7 @@ const getAddresses = (): ContractAddresses => {
 const getBigNounsAddresses = (): ContractAddresses => {
   let bigNounsNounsAddresses = {} as NounsContractAddresses;
   try {
-    bigNounsNounsAddresses = getBigNounsContractAddressesForChainOrThrow(CHAIN_ID);
+    bigNounsNounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
   } catch {}
   return { ...bigNounsNounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
