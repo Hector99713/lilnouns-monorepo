@@ -154,23 +154,30 @@ task(
       DeployedContract
     >;
     const contracts: Record<ContractName, ContractDeployment> = {
-      NFTDescriptorV2: {},
-      SVGRenderer: {},
-      NounsDescriptorV2: {
+      NFTDescriptorV2: {}, // libary
+      SVGRenderer: {}, // libary  
+      NounsDescriptorV2: { // nouns descriptor基类
         args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
       },
-      Inflator: {},
-      NounsArt: {
+      Inflator: {}, // 压缩数据算法
+      NounsArt: { // 存储nouns的数据
         args: [
           () => deployment.NounsDescriptorV2.address,
           () => deployment.Inflator.address,
         ],
       },
-      NounsSeeder: {},
-      NounsToken: {
+      NounsSeeder: {}, //伪随机种子
+      NounsToken: { //nouns 721实现. 构造参数
+        /*
+          1. dao 地址
+          2. 预计算的auction house proxy地址
+          3. nouns 描述器地址
+          4. nouns 随机种子地址
+          5. proxy registry 地址,如果测试网上没有这个接口没关系，直接用super类的appove接口判断权限
+        */
         args: [
           args.lilnoundersdao,
           args.nounsdao,
@@ -180,11 +187,11 @@ task(
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      NounsAuctionHouse: { // 拍卖的主体合约
         waitForConfirmation: true,
       },
-      NounsAuctionHouseProxyAdmin: {},
-      NounsAuctionHouseProxy: {
+      NounsAuctionHouseProxyAdmin: {}, // 拍卖的proxy管理合约.保证合约升级的安全性
+      NounsAuctionHouseProxy: { //  实际的代理合约
         args: [
           () => deployment.NounsAuctionHouse.address,
           () => deployment.NounsAuctionHouseProxyAdmin.address,
@@ -213,13 +220,15 @@ task(
           }
         },
       },
-      NounsDAOExecutor: {
+      NounsDAOExecutor: // dao管理合约。具体功能是执行已通过提案的机制。
+       {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NounsDAOLogicV1: // dao逻辑。具体负责提案创建、投票规则等。处理提案和投票过程的治理框架。
+      {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NounsDAOProxy: { // dao的代理合约
         args: [
           () => deployment.NounsDAOExecutor.address,
           () => deployment.NounsToken.address,
